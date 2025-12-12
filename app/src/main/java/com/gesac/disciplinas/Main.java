@@ -1,4 +1,4 @@
-package com.example;
+package com.gesac.disciplinas;
 
 public class Main {
     public static void main(String[] args) {
