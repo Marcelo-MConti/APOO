@@ -3,6 +3,7 @@ package com.gesac.disciplinas;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Optional;
 import java.util.OptionalInt;
 
 public class Main {
@@ -21,6 +22,7 @@ public class Main {
     };
 
     static final Mensagens msg = new Mensagens();
+    static final DisciplinaController controller = new DisciplinaController();
 
     static int readInteger(BufferedReader reader) throws IOException {
         OptionalInt value = OptionalInt.empty();
@@ -70,13 +72,37 @@ public class Main {
 
                         System.out.println(suboptions);
                         int chosenSubOption = readInteger(reader);
+
+                        int id;
+                        Disciplina disc = null;
                     
                         switch (chosenSubOption) {
                             case CrudOption.ADICIONAR:
+                                
                                 break subOptionLoop; 
                             case CrudOption.EDITAR:
+                                System.out.println("Digite o ID da disciplina que você deseja editar:");
+                                
+                                do {
+                                    id = readInteger(reader);
+                                    disc = controller.visualizarDisciplina(id);
+                                } while (disc != null);
+
+                                // controller.editarDisciplina(id, dados);
+                                System.out.println(msg.gerar(TipoMensagem.SUCESSO, "Os dados da disciplina foram alterados"));
+
                                 break subOptionLoop;
                             case CrudOption.EXCLUIR:
+                                System.out.println("Digite o ID da disciplina que você deseja remover:");
+
+                                do {
+                                    id = readInteger(reader);
+                                    disc = controller.visualizarDisciplina(id);
+                                } while (disc != null);
+
+                                controller.removerDisciplina(id);
+                                System.out.println(msg.gerar(TipoMensagem.SUCESSO, "Disciplina removida"));
+                                
                                 break subOptionLoop;
                             default:
                                 System.out.println(msg.gerar(TipoMensagem.ERRO, "Opção inválida: %d".formatted(chosenSubOption)));
