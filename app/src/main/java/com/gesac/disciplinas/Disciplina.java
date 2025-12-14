@@ -21,4 +21,8 @@ public class Disciplina {
     public void editarAtividade(Atividade a) {
         throw new UnsupportedOperationException();
     }
+
+    public List<Atividade> getAtividades() {
+        return atividades;
+    }
 }

@@ -3,7 +3,9 @@ package com.gesac.disciplinas;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.OptionalInt;
 
 public class Main {
@@ -38,6 +40,24 @@ public class Main {
         return value.orElseThrow();
     }
 
+    static double mediaDisc(Disciplina disc) {
+        List<Atividade> atividades = disc.getAtividades();
+        double media = 0;
+
+        for (Atividade ativ : atividades) {
+            media += ativ.getNota();
+        }
+
+        media /= atividades.size();
+        return media;
+    }
+
+    static Map readDisc(BufferedReader reader) {
+        Map dados = new HashMap();
+
+        return dados;
+    }
+
     public static void main(String[] args) throws IOException {
         final String banner = ":: Sistema de Gestão Acadêmico :: Disciplinas e Turmas";
 
@@ -58,6 +78,9 @@ public class Main {
             System.out.println(options);
             int chosenOption = readInteger(reader);
 
+            int id;
+            Disciplina disc = null;
+
             switch (chosenOption) {
                 case MenuOption.GERENCIAR:
                     subOptionLoop: while (true) {
@@ -72,13 +95,10 @@ public class Main {
 
                         System.out.println(suboptions);
                         int chosenSubOption = readInteger(reader);
-
-                        int id;
-                        Disciplina disc = null;
                     
                         switch (chosenSubOption) {
                             case CrudOption.ADICIONAR:
-                                
+                                controller.criarDisciplina(readDisc(reader));
                                 break subOptionLoop; 
                             case CrudOption.EDITAR:
                                 System.out.println("Digite o ID da disciplina que você deseja editar:");
@@ -88,7 +108,7 @@ public class Main {
                                     disc = controller.visualizarDisciplina(id);
                                 } while (disc != null);
 
-                                // controller.editarDisciplina(id, dados);
+                                controller.editarDisciplina(id, readDisc(reader));
                                 System.out.println(msg.gerar(TipoMensagem.SUCESSO, "Os dados da disciplina foram alterados"));
 
                                 break subOptionLoop;
@@ -112,10 +132,20 @@ public class Main {
 
                     break;
                 case MenuOption.MEDIA_DISCIPLINA:
+                    do {
+                        id = readInteger(reader);
+                        disc = controller.visualizarDisciplina(id);
+                    } while (disc != null);
+
+                    double media = mediaDisc(disc);
+                    
+                    msg.gerar(TipoMensagem.SUCESSO, "Média da disciplina: %lf".formatted(media));
                     break;
                 case MenuOption.MEDIA_ATIVIDADES:
+                    // XXX
                     break;
                 case MenuOption.EDITAR_ATIVIDADES:
+                    
                     break;
                 case MenuOption.SAIR:
                     System.exit(0);
