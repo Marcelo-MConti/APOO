@@ -43,12 +43,19 @@ public class Main {
     static double mediaDisc(Disciplina disc) {
         List<Atividade> atividades = disc.getAtividades();
         double media = 0;
+        int n = 0;
 
         for (Atividade ativ : atividades) {
-            media += ativ.getNota();
+            switch (ativ) {
+                case Prova p -> {
+                    media += p.nota;
+                    n++;
+                }
+                default -> {}
+            }
         }
 
-        media /= atividades.size();
+        media /= (n != 0 ? n : 1);
         return media;
     }
 

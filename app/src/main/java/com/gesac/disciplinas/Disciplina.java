@@ -3,11 +3,10 @@ package com.gesac.disciplinas;
 import java.util.List;
 
 public class Disciplina {
-    private int id;
-    private String nome;
-    private String professor;
-    private int cargaHoraria;
-    private List<Atividade> atividades;
+    int id;
+    String nome;
+    int cargaHoraria;
+    List<Atividade> atividades;
 
     public void adicionarAtividade(Atividade a) {
         throw new UnsupportedOperationException();
@@ -20,9 +19,5 @@ public class Disciplina {
     // How is this one going to work? 🤔 
     public void editarAtividade(Atividade a) {
         throw new UnsupportedOperationException();
-    }
-
-    public List<Atividade> getAtividades() {
-        return atividades;
     }
 }

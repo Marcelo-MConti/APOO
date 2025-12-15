@@ -1,5 +1,6 @@
 package com.gesac.disciplinas;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -8,20 +9,36 @@ public class DisciplinaController {
     Validador validador = new Validador();
     Mensagens mensagens = new Mensagens();
 
+    int inc = 0;
+
     public void criarDisciplina(Map dados) {
-        throw new UnsupportedOperationException();
+        Disciplina d = new Disciplina();
+
+        d.id = inc++;
+        d.atividades = new ArrayList<Atividade>();
+        d.nome = (String)dados.get("nome");
+        d.cargaHoraria = (Integer)dados.get("cargaHoraria");
+
+        // XXX
+        repositorio.atualizar(d);
     }
 
     public void editarDisciplina(int id, Map dados) {
-        throw new UnsupportedOperationException();
+        Disciplina d = repositorio.buscarPorId(id);
+
+        d.nome = (String)dados.get("nome");
+        d.cargaHoraria = (Integer)dados.get("cargaHoraria");
+
+        // XXX
+        repositorio.atualizar(d);
     }
 
     public void removerDisciplina(int id) {
-        throw new UnsupportedOperationException();
+        repositorio.remover(id);
     }
 
     public Disciplina visualizarDisciplina(int id) {
-        throw new UnsupportedOperationException();
+        return repositorio.buscarPorId(id);
     }
 
     public List<Atividade> checarAtividadesPendentes() {
