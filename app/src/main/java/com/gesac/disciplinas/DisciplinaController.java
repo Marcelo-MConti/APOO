@@ -35,7 +35,7 @@ public class DisciplinaController {
 
         for (Disciplina disc : disciplinas) {
             for (Atividade ativ : disc.atividades) {
-                Boolean shouldAdd = !ativ.dataInicio.after(today);
+                Boolean shouldAdd = !ativ.dataEntrega.after(today);
                 
                 switch (ativ) {
                     case Prova p -> {
