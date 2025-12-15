@@ -39,10 +39,14 @@ public class Main {
         return value.orElseThrow();
     }
 
-    static Disciplina readDisc(BufferedReader reader) {
-        Disciplina disc = new Disciplina();
+    static Disciplina readDisc(BufferedReader reader, Disciplina prev) {
+        Disciplina disc = prev == null ? new Disciplina() : prev;
 
         return disc;
+    }
+
+    static Atividade readAtividade(BufferedReader reader, Atividade prev) {
+        throw new UnsupportedOperationException();
     }
 
     static double mediaDisc(Disciplina disc) {
@@ -71,7 +75,7 @@ public class Main {
         
         1. Gerenciar disciplinas
         2. Calcular a média de uma disciplina
-        3. Calcular a média de atividades
+        3. Calcular a média das atividades
         4. Editar atividades
         
         5. Sair
@@ -108,7 +112,7 @@ public class Main {
                                 controller.criarDisciplina(disc);
                                 break subOptionLoop; 
                             case CrudOption.EDITAR:
-                                System.out.println("Digite o ID da disciplina que você deseja editar:");
+                                System.out.print("Digite o ID da disciplina que você deseja editar: ");
                                 
                                 do {
                                     id = readInteger(reader);
@@ -119,7 +123,7 @@ public class Main {
 
                                 break subOptionLoop;
                             case CrudOption.EXCLUIR:
-                                System.out.println("Digite o ID da disciplina que você deseja remover:");
+                                System.out.print("Digite o ID da disciplina que você deseja remover: ");
 
                                 do {
                                     id = readInteger(reader);
@@ -130,26 +134,55 @@ public class Main {
                                 
                                 break subOptionLoop;
                             default:
-                                System.out.println(new Mensagem(TipoMensagem.ERRO, "Opção inválida: %d".formatted(chosenSubOption)).toString());
+                                System.out.println(
+                                    new Mensagem(TipoMensagem.ERRO, "Opção inválida: %d".formatted(chosenSubOption)).toString()
+                                );
                                 break;
                         }
                     }
 
                     break;
                 case MenuOption.MEDIA_DISCIPLINA:
+                    System.out.print("Digite o ID da disciplina cuja média será calculada: ");
+                    
                     do {
                         id = readInteger(reader);
                         disc = controller.visualizarDisciplina(id);
                     } while (disc != null);
 
                     double media = mediaDisc(disc);
+                    System.out.println(
+                        new Mensagem(TipoMensagem.SUCESSO, "Média da disciplina: %lf".formatted(media)).toString()
+                    );
                     
-                    new Mensagem(TipoMensagem.SUCESSO, "Média da disciplina: %lf".formatted(media)).toString();
                     break;
                 case MenuOption.MEDIA_ATIVIDADES:
-                    // XXX
+                    List<Disciplina> disciplinas = controller.repository.listarTodas();
+
+                    double mediaAtiv = 0;
+                    int n = disciplinas.size();
+
+                    for (Disciplina d : disciplinas) {
+                        mediaAtiv += mediaDisc(d);
+                    }
+
+                    mediaAtiv /= (n != 0 ? n : 1);
+                    System.out.println(
+                        new Mensagem(TipoMensagem.SUCESSO, "Média das atividades: %lf".formatted(mediaAtiv)).toString()
+                    );
+                    
                     break;
                 case MenuOption.EDITAR_ATIVIDADES:
+                    System.out.print("Digite o ID da disciplina de interesse: ");
+
+                    do {
+                        id = readInteger(reader);
+                        disc = controller.visualizarDisciplina(id);
+                    } while (disc != null);
+
+                    System.out.println("Qual atividade você quer editar? (0 para criar uma atividade)");
+
+                    // XXX: print list
                     
                     break;
                 case MenuOption.SAIR:
