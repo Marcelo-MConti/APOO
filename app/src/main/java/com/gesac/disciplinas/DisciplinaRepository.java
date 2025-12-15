@@ -1,9 +1,9 @@
 package com.gesac.disciplinas;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class DisciplinaRepository {
-    private String arquivo;
     private HashMap<Integer, Disciplina> disciplinas;
 
     public void salvar(Disciplina d) {
@@ -18,15 +18,11 @@ public class DisciplinaRepository {
         throw new UnsupportedOperationException();
     }
 
-    public Disciplina buscar(int id) {
-        throw new UnsupportedOperationException();
-    }
-    
-    private void lerArquivo() {
+    public Disciplina buscarPorId(int id) {
         throw new UnsupportedOperationException();
     }
 
-    private void escreverArquivo() {
+    public List<Disciplina> listarTodas() {
         throw new UnsupportedOperationException();
     }
 }

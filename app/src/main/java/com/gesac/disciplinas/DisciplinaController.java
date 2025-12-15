@@ -20,10 +20,6 @@ public class DisciplinaController {
         throw new UnsupportedOperationException();
     }
 
-    public List<Disciplina> listarDisciplinas() {
-        throw new UnsupportedOperationException();
-    }
-
     public Disciplina visualizarDisciplina(int id) {
         throw new UnsupportedOperationException();
     }
