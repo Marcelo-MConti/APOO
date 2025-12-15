@@ -15,7 +15,7 @@ Durante a análise do componente selecionado, foram identificadas as classes:
 
 O diagrama de classes desenvolvidos segue abaixo mostrando os métodos de cada classe
 
-<img width="761" height="1076" alt="diagrama" src="https://github.com/user-attachments/assets/b8aa8d40-b38e-4ec0-a220-2834519737e3" />
+<img width="761" height="1076" alt="diagrama" src="https://github.com/user-attachments/assets/e6623b5c-a468-4bcd-9764-07706a3b6281" />
 
 # Funções selecionadas
 
