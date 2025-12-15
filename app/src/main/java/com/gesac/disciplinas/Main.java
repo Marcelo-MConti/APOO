@@ -3,9 +3,7 @@ package com.gesac.disciplinas;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.OptionalInt;
 
 public class Main {
@@ -39,14 +37,25 @@ public class Main {
         return value.orElseThrow();
     }
 
-    static Disciplina readDisc(BufferedReader reader, Disciplina prev) {
+    static Disciplina readDisc(BufferedReader reader, Disciplina prev) throws IOException
+     {
         Disciplina disc = prev == null ? new Disciplina() : prev;
 
-        return disc;
-    }
+        if (prev == null)
+            System.out.print("Nome: ");
+        else
+            System.out.print("Nome (%s): ".formatted(prev.nome));
 
-    static Atividade readAtividade(BufferedReader reader, Atividade prev) {
-        throw new UnsupportedOperationException();
+        disc.nome = reader.readLine();
+
+        if (prev == null)
+            System.out.println("Carga horária/qtde. de horas: ");
+        else
+            System.out.print("Carga horária/qtde. de horas (%d): ".formatted(prev.cargaHoraria));
+
+        disc.cargaHoraria = readInteger(reader);
+
+        return disc;
     }
 
     static double mediaDisc(Disciplina disc) {
@@ -108,7 +117,7 @@ public class Main {
                     
                         switch (chosenSubOption) {
                             case CrudOption.ADICIONAR:
-                                disc = readDisc(reader);
+                                disc = readDisc(reader, null);
                                 controller.criarDisciplina(disc);
                                 break subOptionLoop; 
                             case CrudOption.EDITAR:
@@ -118,6 +127,8 @@ public class Main {
                                     id = readInteger(reader);
                                     disc = controller.visualizarDisciplina(id);
                                 } while (disc != null);
+
+                                disc = readDisc(reader, disc);
 
                                 System.out.println(controller.editarDisciplina(disc).toString());
 
@@ -157,30 +168,30 @@ public class Main {
                     
                     break;
                 case MenuOption.MEDIA_ATIVIDADES:
-                    List<Disciplina> disciplinas = controller.repository.listarTodas();
+                    // List<Disciplina> disciplinas = controller.repository.listarTodas();
 
-                    double mediaAtiv = 0;
-                    int n = disciplinas.size();
+                    // double mediaAtiv = 0;
+                    // int n = disciplinas.size();
 
-                    for (Disciplina d : disciplinas) {
-                        mediaAtiv += mediaDisc(d);
-                    }
+                    // for (Disciplina d : disciplinas) {
+                    //     mediaAtiv += mediaDisc(d);
+                    // }
 
-                    mediaAtiv /= (n != 0 ? n : 1);
-                    System.out.println(
-                        new Mensagem(TipoMensagem.SUCESSO, "Média das atividades: %lf".formatted(mediaAtiv)).toString()
-                    );
+                    // mediaAtiv /= (n != 0 ? n : 1);
+                    // System.out.println(
+                    //     new Mensagem(TipoMensagem.SUCESSO, "Média das atividades: %lf".formatted(mediaAtiv)).toString()
+                    // );
                     
                     break;
                 case MenuOption.EDITAR_ATIVIDADES:
-                    System.out.print("Digite o ID da disciplina de interesse: ");
+                    // System.out.print("Digite o ID da disciplina de interesse: ");
 
-                    do {
-                        id = readInteger(reader);
-                        disc = controller.visualizarDisciplina(id);
-                    } while (disc != null);
+                    // do {
+                    //     id = readInteger(reader);
+                    //     disc = controller.visualizarDisciplina(id);
+                    // } while (disc != null);
 
-                    System.out.println("Qual atividade você quer editar? (0 para criar uma atividade)");
+                    // System.out.println("Qual atividade você quer editar? (0 para criar uma atividade)");
 
                     // XXX: print list
                     
