@@ -1,5 +1,6 @@
 package com.gesac.disciplinas;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Disciplina {
@@ -8,12 +9,16 @@ public class Disciplina {
     int cargaHoraria;
     List<Atividade> atividades;
 
+    public Disciplina() {
+        this(0, "", 0, null);
+    }
+
     // construtor da minha classe
-    public Disciplina(int id, String nome, int cargaHoraria, List<Atividade> atividades){
+    public Disciplina(int id, String nome, int cargaHoraria, List<Atividade> atividades) {
         this.id = id;
         this.nome = nome;
         this.cargaHoraria = cargaHoraria;
-        this.atividades = atividades;
+        this.atividades = atividades == null ? new ArrayList<>() : atividades;
     }
 
     public void adicionarAtividade(Atividade a) {
@@ -23,9 +28,7 @@ public class Disciplina {
     public void removerAtividade(int id) {
         // pesquiso por todas as atividades
         // removo quando encontrar
-        for(Atividade a : atividades){
-            if(a.id == id) this.atividades.remove(a);
-        }
+        this.atividades.removeIf(a -> a.id == id);
     }
 
     // Funcionalmento da atividade:

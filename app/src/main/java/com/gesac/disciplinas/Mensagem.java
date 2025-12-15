@@ -8,12 +8,12 @@ enum TipoMensagem {
 public class Mensagem {
     private TipoMensagem tipo;
     private String conteudo;
-    
-    Mensagem(TipoMensagem tipo, String conteudo) {
+
+    public Mensagem(TipoMensagem tipo, String conteudo) {
         this.tipo = tipo;
         this.conteudo = conteudo;
     }
-    
+
     @Override
     public String toString() {
         switch (tipo) {

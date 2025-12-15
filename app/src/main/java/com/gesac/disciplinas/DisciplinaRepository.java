@@ -1,32 +1,32 @@
 package com.gesac.disciplinas;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
 
 public class DisciplinaRepository {
-    private HashMap<Integer, Disciplina> disciplinas;
+    private final List<Disciplina> armazenamento = new ArrayList<>();
 
-    // fazer metodos auxiliares:
-    private List<Disciplina> lerTodasDisc(){
-        // usar FUNCIONAL, para ler do CSV e converter para Disciplina DiscFromCSV
-        // ?
+    // métodos auxiliares (in-memory)
+    private List<Disciplina> lerTodasDisc() {
+        return new ArrayList<>(armazenamento);
     }
 
     private void escreverTodasDisc(List<Disciplina> disciplinas) {
-        // usar Funcional, DiscToCSV
-        // ?
+        armazenamento.clear();
+        armazenamento.addAll(disciplinas);
     }
 
-    private List<Atividade> lerTodasAtiv(){
-        // usar FUNCIONAL, para ler do CSV e converter para Ativ AtivFromCSV
-        // ?
+    private List<Atividade> lerTodasAtiv() {
+        List<Atividade> atividades = new ArrayList<>();
+        for (Disciplina d : armazenamento) {
+            if (d.atividades != null)
+                atividades.addAll(d.atividades);
+        }
+        return atividades;
     }
 
     private void escreverTodasAtiv(List<Atividade> atividade) {
-        // usar Funcional, AtivToCSV
-        // ?
+        // sem persistência implementada para atividades separadamente.
     }
 
     public void salvar(Disciplina d) {
@@ -42,15 +42,15 @@ public class DisciplinaRepository {
     }
 
     public void remover(int id) {
-        List<Disciplina>disciplinas = lerTodasDisc();
-        disciplinas.removeIf(d->d.id == id);
+        List<Disciplina> disciplinas = lerTodasDisc();
+        disciplinas.removeIf(d -> d.id == id);
         escreverTodasDisc(disciplinas);
     }
 
-    public Optional<Disciplina> buscarPorId(int id) {
+    public Disciplina buscarPorId(int id) {
         return lerTodasDisc().stream()
-               .filter(d -> d.id == id)
-               .findFirst();            
+                .filter(d -> d.id == id)
+                .findFirst().orElse(null);
     }
 
     public List<Disciplina> listarTodas() {

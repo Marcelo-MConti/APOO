@@ -14,7 +14,7 @@ public class DisciplinaController {
     }
 
     public Mensagem editarDisciplina(Disciplina d) {
-        repository.salvar(d);
+        repository.atualizar(d);
         return new Mensagem(TipoMensagem.SUCESSO, "Os dados da disciplina foram alterados");
     }
 
@@ -34,24 +34,28 @@ public class DisciplinaController {
         List<Atividade> pendentes = new ArrayList<Atividade>();
 
         for (Disciplina disc : disciplinas) {
+            if (disc.atividades == null)
+                continue;
             for (Atividade ativ : disc.atividades) {
-                Boolean shouldAdd = !ativ.dataEntrega.after(today);
-                
-                switch (ativ) {
-                    case Prova p -> {
+                boolean shouldAdd = ativ.dataInicio == null ? true : !ativ.dataInicio.after(today);
+
+                if (ativ instanceof Prova) {
+                    Prova p = (Prova) ativ;
+                    if (p.dataRealizacao != null) {
                         shouldAdd = shouldAdd && !p.dataRealizacao.before(today);
                     }
-                    case Trabalho t -> {
+                } else if (ativ instanceof Trabalho) {
+                    Trabalho t = (Trabalho) ativ;
+                    if (t.dataEntrega != null) {
                         shouldAdd = shouldAdd && !t.dataEntrega.before(today);
                     }
-                    default -> {}
                 }
 
                 if (shouldAdd)
                     pendentes.add(ativ);
             }
         }
-        
+
         return pendentes;
     }
 }
