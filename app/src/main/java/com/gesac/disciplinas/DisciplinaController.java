@@ -1,59 +1,56 @@
 package com.gesac.disciplinas;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 public class DisciplinaController {
-    DisciplinaRepository repositorio = new DisciplinaRepository();
-    Validador validador = new Validador();
-    Mensagens mensagens = new Mensagens();
+    DisciplinaRepository repository = new DisciplinaRepository();
 
-    int inc = 0;
-
-    public void criarDisciplina(Map dados) {
-        Disciplina d = new Disciplina();
-
-        d.id = inc++;
-        d.atividades = new ArrayList<Atividade>();
-        d.nome = (String)dados.get("nome");
-        d.cargaHoraria = (Integer)dados.get("cargaHoraria");
-
-        // XXX
-        repositorio.atualizar(d);
+    public Mensagem criarDisciplina(Disciplina d) {
+        repository.salvar(d);
+        return new Mensagem(TipoMensagem.SUCESSO, "Disciplina criada");
     }
 
-    public void editarDisciplina(int id, Map dados) {
-        Disciplina d = repositorio.buscarPorId(id);
-
-        d.nome = (String)dados.get("nome");
-        d.cargaHoraria = (Integer)dados.get("cargaHoraria");
-
-        // XXX
-        repositorio.atualizar(d);
+    public Mensagem editarDisciplina(Disciplina d) {
+        repository.salvar(d);
+        return new Mensagem(TipoMensagem.SUCESSO, "Os dados da disciplina foram alterados");
     }
 
-    public void removerDisciplina(int id) {
-        repositorio.remover(id);
+    public Mensagem removerDisciplina(int id) {
+        repository.remover(id);
+        return new Mensagem(TipoMensagem.SUCESSO, "A disciplina foi removida");
     }
 
     public Disciplina visualizarDisciplina(int id) {
-        return repositorio.buscarPorId(id);
+        return repository.buscarPorId(id);
     }
 
     public List<Atividade> checarAtividadesPendentes() {
-        throw new UnsupportedOperationException();
-    }
+        Date today = new Date();
+        List<Disciplina> disciplinas = repository.listarTodas();
 
-    public void adicionarAtividade(int idDisciplina, int idAtividade, Map dados) {
-        throw new UnsupportedOperationException();
-    }
+        List<Atividade> pendentes = new ArrayList<Atividade>();
 
-    public void editarAtividade(int idDisciplina, int idAtividade, Map dados) {
-        throw new UnsupportedOperationException();
-    }
+        for (Disciplina disc : disciplinas) {
+            for (Atividade ativ : disc.atividades) {
+                Boolean shouldAdd = !ativ.dataInicio.after(today);
+                
+                switch (ativ) {
+                    case Prova p -> {
+                        shouldAdd = shouldAdd && !p.dataRealizacao.before(today);
+                    }
+                    case Trabalho t -> {
+                        shouldAdd = shouldAdd && !t.dataEntrega.before(today);
+                    }
+                    default -> {}
+                }
 
-    public void removerAtividade(int idDisciplina, int idAtividade) {
-        throw new UnsupportedOperationException();
+                if (shouldAdd)
+                    pendentes.add(ativ);
+            }
+        }
+        
+        return pendentes;
     }
 }

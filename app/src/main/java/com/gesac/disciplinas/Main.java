@@ -23,7 +23,6 @@ public class Main {
         static final int EXCLUIR = 3;
     };
 
-    static final Mensagens msg = new Mensagens();
     static final DisciplinaController controller = new DisciplinaController();
 
     static int readInteger(BufferedReader reader) throws IOException {
@@ -33,11 +32,17 @@ public class Main {
             try {
                 value = OptionalInt.of(Integer.valueOf(reader.readLine()));
             } catch (NumberFormatException ex) {
-                System.out.println(msg.gerar(TipoMensagem.ERRO, "Digite um número válido"));
+                System.out.println(new Mensagem(TipoMensagem.ERRO, "Digite um número válido").toString());
             }
         }
 
         return value.orElseThrow();
+    }
+
+    static Disciplina readDisc(BufferedReader reader) {
+        Disciplina disc = new Disciplina();
+
+        return disc;
     }
 
     static double mediaDisc(Disciplina disc) {
@@ -57,12 +62,6 @@ public class Main {
 
         media /= (n != 0 ? n : 1);
         return media;
-    }
-
-    static Map readDisc(BufferedReader reader) {
-        Map dados = new HashMap();
-
-        return dados;
     }
 
     public static void main(String[] args) throws IOException {
@@ -105,7 +104,8 @@ public class Main {
                     
                         switch (chosenSubOption) {
                             case CrudOption.ADICIONAR:
-                                controller.criarDisciplina(readDisc(reader));
+                                disc = readDisc(reader);
+                                controller.criarDisciplina(disc);
                                 break subOptionLoop; 
                             case CrudOption.EDITAR:
                                 System.out.println("Digite o ID da disciplina que você deseja editar:");
@@ -115,8 +115,7 @@ public class Main {
                                     disc = controller.visualizarDisciplina(id);
                                 } while (disc != null);
 
-                                controller.editarDisciplina(id, readDisc(reader));
-                                System.out.println(msg.gerar(TipoMensagem.SUCESSO, "Os dados da disciplina foram alterados"));
+                                System.out.println(controller.editarDisciplina(disc).toString());
 
                                 break subOptionLoop;
                             case CrudOption.EXCLUIR:
@@ -127,12 +126,11 @@ public class Main {
                                     disc = controller.visualizarDisciplina(id);
                                 } while (disc != null);
 
-                                controller.removerDisciplina(id);
-                                System.out.println(msg.gerar(TipoMensagem.SUCESSO, "Disciplina removida"));
+                                System.out.println(controller.removerDisciplina(id).toString());
                                 
                                 break subOptionLoop;
                             default:
-                                System.out.println(msg.gerar(TipoMensagem.ERRO, "Opção inválida: %d".formatted(chosenSubOption)));
+                                System.out.println(new Mensagem(TipoMensagem.ERRO, "Opção inválida: %d".formatted(chosenSubOption)).toString());
                                 break;
                         }
                     }
@@ -146,7 +144,7 @@ public class Main {
 
                     double media = mediaDisc(disc);
                     
-                    msg.gerar(TipoMensagem.SUCESSO, "Média da disciplina: %lf".formatted(media));
+                    new Mensagem(TipoMensagem.SUCESSO, "Média da disciplina: %lf".formatted(media)).toString();
                     break;
                 case MenuOption.MEDIA_ATIVIDADES:
                     // XXX
@@ -157,7 +155,7 @@ public class Main {
                 case MenuOption.SAIR:
                     System.exit(0);
                 default:
-                    System.out.println(msg.gerar(TipoMensagem.ERRO, "Opção inválida: %d".formatted(chosenOption)));
+                    System.out.println(new Mensagem(TipoMensagem.ERRO, "Opção inválida: %d".formatted(chosenOption)).toString());
                     break;
             }
         }
