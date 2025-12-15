@@ -41,7 +41,7 @@ public class Main {
     }
 
     static double mediaDisc(Disciplina disc) {
-        List<Atividade> atividades = disc.getAtividades();
+        List<Atividade> atividades = disc.atividades;
         double media = 0;
         int n = 0;
 
